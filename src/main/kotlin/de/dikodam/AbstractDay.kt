@@ -1,7 +1,7 @@
 package de.dikodam
 
 abstract class AbstractDay {
-    fun executeTasks() {
+    operator fun invoke() {
         val day = this::class.simpleName
         println("The result of $day task 1 is: ${task1()}")
         println("The result of $day task 2 is: ${task2()}")

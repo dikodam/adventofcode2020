@@ -4,7 +4,7 @@ import asInts
 import de.dikodam.AbstractDay
 
 fun main() {
-    Day01().executeTasks()
+    Day01()()
 }
 
 class Day01 : AbstractDay() {
