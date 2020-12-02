@@ -10,9 +10,9 @@ internal class PolicyTest {
     @Test
     fun validate() {
         assertAll(
-            { assertThat(Policy(1, 3, 'a').validate("abcde")).isTrue() },
-            { assertThat(Policy(1, 3, 'b').validate("cdefg")).isFalse() },
-            { assertThat(Policy(2, 9, 'c').validate("ccccccccc")).isTrue() }
+            { assertThat(Policy(1, 3, 'a').validateCharCount("abcde")).isTrue() },
+            { assertThat(Policy(1, 3, 'b').validateCharCount("cdefg")).isFalse() },
+            { assertThat(Policy(2, 9, 'c').validateCharCount("ccccccccc")).isTrue() }
         )
     }
 }

@@ -9,16 +9,17 @@ fun main() {
 class Day02 : AbstractDay() {
 
     override fun task1(): String {
-        return input
-            .lines()
-            .map { line -> parsePolicyAndPassword(line) }
-            .filter { (policy, password) -> policy.validate(password) }
+        return inputLines
+            .filter { (policy, password) -> policy.validateCharCount(password) }
             .count()
             .toString()
     }
 
     override fun task2(): String {
-        return "Not yet implemented"
+        return inputLines
+            .filter { (policy, password) -> policy.validatePositional(password) }
+            .count()
+            .toString()
     }
 
     fun parsePolicyAndPassword(command: String): Pair<Policy, String> {
@@ -28,6 +29,11 @@ class Day02 : AbstractDay() {
         return Pair(Policy(min.toInt(), max.toInt(), character[0]), password)
     }
 
+    private val inputLines by lazy {
+        input
+            .lineSequence()
+            .map { line -> parsePolicyAndPassword(line) }
+    }
 
     private val input =
         """1-13 r: gqdrspndrpsrjfjx
