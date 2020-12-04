@@ -1,11 +1,11 @@
-fun String.characters() =
+fun String.characterSequence() =
     this.chunkedSequence(1) { it[0] }
 
-fun String.asDigits() =
-    this.characters()
+fun String.digitSequence() =
+    this.characterSequence()
         .map { it.toInt() }
 
-fun String.asInts() =
+fun String.intSequence() =
     this.lineSequence().map { it.toInt() }
 
 

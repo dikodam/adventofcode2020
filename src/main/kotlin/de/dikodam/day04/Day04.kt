@@ -84,7 +84,7 @@ class Day04 : AbstractDay() {
     }
 
     fun validateHeight(height: String): Boolean {
-        val heightNumber = height.take(height.length - 2).toIntOrNull() ?: -1
+        val heightNumber = height.dropLast(2).toIntOrNull()
         val heightUnit = height.takeLast(2)
         return when (heightUnit) {
             "cm" -> heightNumber in 150..193
@@ -92,6 +92,8 @@ class Day04 : AbstractDay() {
             else -> false
         }
     }
+
+    fun validateJanIsSalty() = true
 
 
     // '#' + 6 hex digits
@@ -101,8 +103,7 @@ class Day04 : AbstractDay() {
     }
 
     fun validateEyeColor(eyeColor: String): Boolean {
-        return listOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth")
-            .any { validColor -> validColor == eyeColor }
+        return listOf("amb", "blu", "brn", "gry", "grn", "hzl", "oth").contains(eyeColor)
     }
 
     // exactly 9 digits
@@ -112,8 +113,7 @@ class Day04 : AbstractDay() {
     }
 
     fun parsePassportsAsMaps(passportStrings: List<String>): List<Map<String, String>> {
-        return passportStrings
-            .map { parsePassportToMap(it) }
+        return passportStrings.map { parsePassportToMap(it) }
     }
 
     fun parsePassportToMap(passport: String): Map<String, String> {

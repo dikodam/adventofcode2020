@@ -1,6 +1,6 @@
 package de.dikodam.day01
 
-import asInts
+import intSequence
 import de.dikodam.AbstractDay
 
 fun main() {
@@ -10,7 +10,7 @@ fun main() {
 class Day01 : AbstractDay() {
 
     override fun task1(): String {
-        val inputInts = input.asInts()
+        val inputInts = input.intSequence()
 
         return inputInts
             .flatMap { first -> inputInts.map { second -> Pair(first, second) } }
@@ -20,7 +20,7 @@ class Day01 : AbstractDay() {
     }
 
     override fun task2(): String {
-        val inputInts = input.asInts()
+        val inputInts = input.intSequence()
         val triples = inputInts.flatMap { first ->
             inputInts.flatMap { second ->
                 inputInts.map { third ->
