@@ -17,13 +17,20 @@ class Day05 : AbstractDay() {
     }
 
     override fun task2(): String {
-
-        input
+        val sortedSeatIds = input
             .lineSequence()
             .map(BoardingPass::fromString)
+            .map(BoardingPass::computeSeatId)
+            .sorted()
 
+        // my seat's is not in the list, so it's seatId1 + 1 or seatId2 - 1
+        val (seatBeforeMine, _) = sortedSeatIds
+            .windowed(2)
+            .first { (seatId1, seatId2) -> seatId1 + 1 != seatId2 }
 
-        return "Not yet implemented"
+        val mySeatId = seatBeforeMine + 1
+
+        return "$mySeatId"
     }
 
     private val input = """FFBBFFFLRL
