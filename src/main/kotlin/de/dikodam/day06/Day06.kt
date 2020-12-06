@@ -4,10 +4,10 @@ import characterSequence
 import de.dikodam.AbstractDay
 
 fun main() {
-    Day07()()
+    Day06()()
 }
 
-class Day07 : AbstractDay() {
+class Day06 : AbstractDay() {
     override fun task1(): String {
         val groups = input.split("\n\n")
 
