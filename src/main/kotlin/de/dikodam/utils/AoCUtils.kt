@@ -1,11 +1,7 @@
-import kotlin.math.ceil
-
-fun String.characterSequence() =
-    this.chunkedSequence(1) { it[0] }
+package de.dikodam.utils
 
 fun String.digitSequence() =
-    this.characterSequence()
-        .map { it.toInt() }
+    this.map { it.toInt() }
 
 fun String.intSequence() =
     this.lineSequence().map { it.toInt() }

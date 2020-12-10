@@ -1,8 +1,7 @@
 package de.dikodam.day05
 
-import characterSequence
-import firstHalf
-import secondHalf
+import de.dikodam.utils.firstHalf
+import de.dikodam.utils.secondHalf
 
 data class BoardingPass(val row: Int, val column: Int) {
     fun computeSeatId() = row * 8 + column
@@ -11,13 +10,13 @@ data class BoardingPass(val row: Int, val column: Int) {
         fun fromString(boardingPassString: String): BoardingPass {
 
             val row = boardingPassString
-                .characterSequence()
+                .asSequence()
                 .take(7)
                 .fold(0..127, ::narrowRowRange)
                 .first
 
             val column = boardingPassString
-                .characterSequence()
+                .asSequence()
                 .drop(7)
                 .fold(0..7, ::narrowColumnRange)
                 .first

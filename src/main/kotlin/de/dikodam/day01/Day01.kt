@@ -1,6 +1,6 @@
 package de.dikodam.day01
 
-import intSequence
+import de.dikodam.utils.intSequence
 import de.dikodam.AbstractDay
 
 fun main() {

@@ -1,7 +1,5 @@
 package de.dikodam.day02
 
-import characterSequence
-
 data class Policy(val firstNumber: Int, val secondNumber: Int, val character: Char)
 
 fun Policy.validateCharCount(password: String): Boolean {
@@ -14,7 +12,7 @@ fun Policy.validatePositional(password: String): Boolean {
 }
 
 private fun String.countCharacter(character: Char) =
-    this.characterSequence()
+    this.asSequence()
         .filter { it == character }
         .count()
 

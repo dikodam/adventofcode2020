@@ -1,6 +1,5 @@
 package de.dikodam.day03
 
-import characterSequence
 import de.dikodam.AbstractDay
 import de.dikodam.day03.Spot.TREE
 import de.dikodam.utils.Vector2D
@@ -46,7 +45,7 @@ class Day03 : AbstractDay() {
     private val grid by lazy {
         input
             .lineSequence()
-            .map { line -> line.characterSequence().map { it.asSpot() }.toList() }
+            .map { line -> line.asSequence().map { it.asSpot() }.toList() }
             .toList()
     }
 

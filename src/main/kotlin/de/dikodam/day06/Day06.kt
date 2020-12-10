@@ -1,6 +1,5 @@
 package de.dikodam.day06
 
-import characterSequence
 import de.dikodam.AbstractDay
 
 fun main() {
@@ -12,7 +11,7 @@ class Day06 : AbstractDay() {
         val groups = input.split("\n\n")
 
         val sumOfGroups = groups
-            .map { group -> group.replace("\n", "").characterSequence().distinct().count() }
+            .map { group -> group.replace("\n", "").asSequence().distinct().count() }
             .sum()
 
         return "$sumOfGroups"
@@ -31,7 +30,7 @@ class Day06 : AbstractDay() {
     fun computeIntersecionOfGroup(group: String) =
         group
             .split("\n")
-            .map { it.characterSequence().toSet() }
+            .map { it.asSequence().toSet() }
             .reduce(Set<Char>::intersect)
             .size
 
