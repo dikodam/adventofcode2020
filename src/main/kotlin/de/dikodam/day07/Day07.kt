@@ -2,22 +2,68 @@ package de.dikodam.day07
 
 import de.dikodam.AbstractDay
 
-
 fun main() {
     Day07()()
 }
-
+private typealias DirectedAcyclWeightedGraph = List<Node>
+private typealias Node = Pair<String, NodeChildren>
+private typealias NodeChildren = List<Pair<String, Int>>
 
 class Day07 : AbstractDay() {
 
     override fun task1(): String {
-        input
+        val graph = input
             .lineSequence()
             .map { parseLine(it) }
-            .take(5)
-            .forEach { println(it) }
+            .toList()
 
-        return "Not yet implemented"
+        var newColorsWereAdded = true
+        val currentColors: MutableSet<String> = extractParentColorsForChildColor(graph, "shiny gold").toMutableSet()
+        while (newColorsWereAdded) {
+            val newParentColors: Set<String> = currentColors
+                .flatMap { childColor -> extractParentColorsForChildColor(graph, childColor) }
+                .toMutableSet()
+            val sizeBefore = currentColors.size
+            currentColors.addAll(newParentColors)
+            newColorsWereAdded = currentColors.size > sizeBefore
+        }
+
+        // task: how many different colors can contain "shiny gold"
+
+        currentColors.forEach { println(it) }
+
+        return "${currentColors.size}"
+    }
+
+    override fun task2(): String {
+
+        val graph = input
+            .lineSequence()
+            .map { parseLine(it) }
+            .toList()
+
+        fun DirectedAcyclWeightedGraph.getNode(color: String): Node {
+            return this.first { (nodeColor, _) -> color == nodeColor }
+        }
+
+        fun Node.count(): Int {
+            val children: NodeChildren = this.second
+            return if (children.isEmpty()) {
+                0
+            } else {
+                children.map { (name, count) -> count + count * graph.getNode(name).count() }.sum()
+            }
+        }
+
+        val sum = graph.getNode("shiny gold").count()
+
+        return "$sum"
+    }
+
+    fun extractParentColorsForChildColor(graph: DirectedAcyclWeightedGraph, childColor: String): Set<String> {
+        return graph.filter { (_, children) -> children.map { it.first }.contains(childColor) }
+            .map { (parentcolor, _) -> parentcolor }
+            .toSet()
     }
 
 
@@ -46,7 +92,7 @@ class Day07 : AbstractDay() {
     }
 
     // step 2: decide how many amount definitions
-    // contains() -> none => COLOR : 0 (?)
+    // ends with "no other bags" -> none => COLOR : 0 (?)
     // contains(',') -> several => parseSeveral()
     // else -> exactly one => parseOne()
     private fun parseAmountDefinitions(rawAmountDefinitions: String): List<Pair<String, Int>> {
@@ -71,9 +117,15 @@ class Day07 : AbstractDay() {
         return "$colorPart1 $colorPart2" to amount.toInt()
     }
 
-    override fun task2(): String {
-        return "Not yet implemented"
-    }
+    private val testInput = """light red bags contain 1 bright white bag, 2 muted yellow bags.
+dark orange bags contain 3 bright white bags, 4 muted yellow bags.
+bright white bags contain 1 shiny gold bag.
+muted yellow bags contain 2 shiny gold bags, 9 faded blue bags.
+shiny gold bags contain 1 dark olive bag, 2 vibrant plum bags.
+dark olive bags contain 3 faded blue bags, 4 dotted black bags.
+vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
+faded blue bags contain no other bags.
+dotted black bags contain no other bags."""
 
     private val input = """mirrored silver bags contain 4 wavy gray bags.
 clear tan bags contain 5 bright purple bags, 1 pale black bag, 5 muted lime bags.
