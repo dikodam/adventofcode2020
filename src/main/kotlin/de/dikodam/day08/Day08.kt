@@ -13,33 +13,15 @@ enum class Operation {
     ACC, JUMP, NOOP
 }
 
+data class ExecutionResult(val terminatedCorrectly: Boolean, val acc: Int)
+
 class Day08 : AbstractDay() {
     override fun task1(): String {
 
-        val instructions: MutableList<Pair<Instruction, Int>> =
-            input.lineSequence().map { parseInstruction(it) to 0 }.toMutableList()
+        val instructions: List<Instruction> =
+            input.lineSequence().map { parseInstruction(it) }.toList()
 
-        var accumulator = 0
-        var positionPointer = 0
-        var running = true
-
-        while (running) {
-            val (instruction, counter) = instructions[positionPointer]
-            instructions[positionPointer] = Pair(instruction, counter + 1)
-            if (counter > 0) {
-                running = false
-            } else {
-                val (operation, argument) = instruction
-                when (operation) {
-                    JUMP -> positionPointer += argument
-                    NOOP -> positionPointer++
-                    ACC -> {
-                        accumulator += argument
-                        positionPointer++
-                    }
-                }
-            }
-        }
+        val (_, accumulator) = runInstructions(instructions)
 
         return "$accumulator"
     }
@@ -55,8 +37,72 @@ class Day08 : AbstractDay() {
         }
     }
 
+    fun runInstructions(instructions: List<Instruction>): ExecutionResult {
+        val instructionsList = instructions.map { it to 0 }.toMutableList()
+
+        var accumulator = 0
+        var positionPointer = 0
+        var running = true
+        var terminatedCorrectly = false
+
+        while (running) {
+            if (positionPointer == instructionsList.size) {
+                terminatedCorrectly = true
+                running = false
+                continue
+            }
+            val (instruction, counter) = instructionsList[positionPointer]
+            instructionsList[positionPointer] = Pair(instruction, counter + 1)
+            if (counter > 0) {
+                running = false
+            } else {
+                val (operation, argument) = instruction
+                when (operation) {
+                    JUMP -> positionPointer += argument
+                    NOOP -> positionPointer++
+                    ACC -> {
+                        accumulator += argument
+                        positionPointer++
+                    }
+                }
+            }
+        }
+        return ExecutionResult(terminatedCorrectly, accumulator)
+    }
+
+
     override fun task2(): String {
-        return "Not yet implemented"
+        val instructions = input.lineSequence()
+            .map { parseInstruction(it) }
+            .toList()
+
+        val modifiedJumps = instructions.asSequence()
+            .filter { it.operation == JUMP }
+            .mapIndexed { index, _ -> index }
+            .map { jumpIndex -> replaceInstructionAtIndexWith(instructions, jumpIndex, NOOP) }
+
+        val modifiedNoops = instructions.asSequence()
+            .filter { it.operation == NOOP }
+            .mapIndexed { index, _ -> index }
+            .map { jumpIndex -> replaceInstructionAtIndexWith(instructions, jumpIndex, JUMP) }
+
+        val (_, accumulator) = (modifiedJumps + modifiedNoops)
+            .map { runInstructions(it) }
+            .filter { it.terminatedCorrectly }
+            .first()
+
+        return "$accumulator"
+    }
+
+    fun replaceInstructionAtIndexWith(
+        instructions: List<Instruction>,
+        index: Int,
+        newOperation: Operation
+    ): List<Instruction> {
+        val newList = instructions.toMutableList()
+        val (_, argument) = newList[index]
+        newList[index] = Instruction(newOperation, argument)
+        return newList
     }
 
     val input = """acc +9
