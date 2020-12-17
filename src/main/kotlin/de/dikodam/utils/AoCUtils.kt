@@ -20,3 +20,5 @@ fun IntRange.secondHalf(): IntRange {
 
 fun <T> List<T>.splitAfter(count: Int): Pair<List<T>, List<T>> =
     take(count) to drop(count)
+
+data class Quadruple<A, B, C, D>(val a: A, val b: B, val c: C, val d: D)
